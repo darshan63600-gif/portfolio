@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darshan L — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a08;
+    --surface: #111110;
+    --border: #222220;
+    --accent: #c8f542;
+    --accent2: #f5c842;
+    --text: #f0ede6;
+    --muted: #6b6860;
+    --card: #161614;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid rgba(200, 245, 66, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    background: linear-gradient(to bottom, rgba(10,10,8,0.95), transparent);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-shape {
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(200,245,66,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-grid-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,245,66,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,245,66,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 10vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+  .hero-name .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(240,237,230,0.3);
+  }
+
+  .hero-role {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--muted);
+    margin-bottom: 40px;
+    margin-top: 16px;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 420px;
+    margin-bottom: 48px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #0a0a08;
+    padding: 14px 32px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(200,245,66,0.3);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 32px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: none;
+  }
+  .btn-secondary:hover {
+    border-color: var(--muted);
+    transform: translateY(-3px);
+  }
+
+  .hero-visual {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .avatar-frame {
+    position: relative;
+    width: 360px; height: 420px;
+  }
+
+  .avatar-box {
+    width: 100%; height: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-initials {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 7rem;
+    color: var(--accent);
+    line-height: 1;
+    opacity: 0.15;
+    position: absolute;
+  }
+
+  .avatar-icon {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(200,245,66,0.15), rgba(200,245,66,0.05));
+    border: 1px solid rgba(200,245,66,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-icon svg { width: 60px; height: 60px; opacity: 0.6; }
+
+  .avatar-corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--accent);
+    border-style: solid;
+  }
+  .avatar-corner.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+  .avatar-corner.br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+  .float-badge {
+    position: absolute;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 20px;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+  .float-badge.top-right {
+    top: -20px; right: -30px;
+    border-left: 3px solid var(--accent);
+  }
+  .float-badge.bottom-left {
+    bottom: -20px; left: -30px;
+    border-left: 3px solid var(--accent2);
+  }
+  .float-badge .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    display: block;
+    color: var(--accent);
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .scroll-line {
+    width: 40px; height: 1px;
+    background: var(--muted);
+    transform-origin: left;
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { transform: scaleX(1); opacity: 1; }
+    50% { transform: scaleX(0.3); opacity: 0.3; }
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 48px; }
+
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 60px;
+  }
+  .section-title em { font-style: italic; color: var(--muted); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .skill-tag {
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .skill-tag:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease, border-color 0.3s;
+    cursor: none;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,245,66,0.04), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(200,245,66,0.3); }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: rgba(200,245,66,0.08);
+    position: absolute;
+    top: 16px; right: 24px;
+    line-height: 1;
+  }
+
+  .project-cat {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .project-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .project-tag {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 24px;
+    transition: gap 0.3s;
+  }
+  .project-link:hover { gap: 14px; }
+
+  /* EXPERIENCE */
+  .experience-list { max-width: 780px; }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .exp-item:first-child { border-top: 1px solid var(--border); }
+
+  .exp-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+
+  .exp-role {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+
+  .exp-company {
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .exp-desc {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  /* CONTACT */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .contact-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .contact-link:hover { color: var(--accent); }
+  .contact-link:hover .cl-arrow { transform: translate(4px, -4px); }
+
+  .cl-platform {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cl-handle { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+  .cl-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+  }
+
+  .contact-form-area { display: flex; flex-direction: column; gap: 16px; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  input, textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+  input:focus, textarea:focus { border-color: var(--accent); }
+  textarea { height: 140px; resize: none; }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p { font-size: 0.75rem; color: var(--muted); }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .hero-visual { display: none; }
+    section { padding: 60px 24px; }
+    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .exp-item { grid-template-columns: 1fr; gap: 8px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DL</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-bg-shape"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1 class="hero-name">
+      <span class="line1">DARSHAN</span><br>
+      <span class="line2">L</span>
+    </h1>
+    <p class="hero-role">Designer &amp; Developer</p>
+    <p class="hero-desc">
+      Crafting digital experiences where thoughtful design meets clean, purposeful code. I build things that are beautiful, fast, and meaningful.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Work →</a>
+      <a href="#contact" class="btn-secondary">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="avatar-frame">
+      <div class="avatar-box">
+        <div class="avatar-initials">DL</div>
+        <div class="avatar-icon">
+          <svg viewBox="0 0 64 64" fill="none" stroke="#c8f542" stroke-width="1.5">
+            <circle cx="32" cy="22" r="12"/>
+            <path d="M8 56c0-13.255 10.745-24 24-24s24 10.745 24 24"/>
+          </svg>
+        </div>
+        <div class="avatar-corner tl"></div>
+        <div class="avatar-corner br"></div>
+      </div>
+      <div class="float-badge top-right">
+        <span class="num">3+</span>
+        Years of Experience
+      </div>
+      <div class="float-badge bottom-left">
+        <span class="num">20+</span>
+        Projects Delivered
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About Me</div>
+  <h2 class="section-title">Turning ideas <em>into reality</em></h2>
+  <div class="about-grid fade-up">
+    <div class="about-text">
+      <p>
+        Hi, I'm Darshan L — a creative developer with a passion for building elegant digital products. I sit at the intersection of design and engineering, obsessing over every pixel and every line of code.
+      </p>
+      <p>
+        Based in Bengaluru, I've worked on everything from polished user interfaces to robust full-stack applications. My approach is simple: understand the problem deeply, design with empathy, and build with precision.
+      </p>
+      <p>
+        When I'm not coding, you'll find me exploring new design trends, contributing to open source, or experimenting with creative side projects.
+      </p>
+    </div>
+    <div>
+      <div class="section-label" style="margin-bottom:24px;">Skills &amp; Technologies</div>
+      <div class="skills-grid">
+        <div class="skill-tag">React / Next.js</div>
+        <div class="skill-tag">TypeScript</div>
+        <div class="skill-tag">Node.js</div>
+        <div class="skill-tag">Python</div>
+        <div class="skill-tag">UI/UX Design</div>
+        <div class="skill-tag">Figma</div>
+        <div class="skill-tag">PostgreSQL</div>
+        <div class="skill-tag">AWS / Cloud</div>
+        <div class="skill-tag">Tailwind CSS</div>
+        <div class="skill-tag">GraphQL</div>
+        <div class="skill-tag">Docker</div>
+        <div class="skill-tag">Git / CI/CD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Selected Work</div>
+  <h2 class="section-title">Projects that <em>matter</em></h2>
+  <div class="projects-grid fade-up">
+
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <div class="project-cat">Web Application</div>
+      <h3 class="project-title">Fintrack Dashboard</h3>
+      <p class="project-desc">A comprehensive personal finance tracker with real-time insights, budget planning, and predictive analytics to help users take control of their money.</p>
+      <div class="project-tags">
+        <span class="project-tag">React</span>
+        <span class="project-tag">Node.js</span>
+        <span class="project-tag">Chart.js</span>
+      </div>
+      <a href="#" class="project-link">View Project ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <div class="project-cat">Mobile App</div>
+      <h3 class="project-title">Pulse Health App</h3>
+      <p class="project-desc">A wellness companion app that tracks daily habits, sleep patterns, and mental health. Features AI-driven recommendations and streak gamification.</p>
+      <div class="project-tags">
+        <span class="project-tag">React Native</span>
+        <span class="project-tag">Firebase</span>
+        <span class="project-tag">ML Kit</span>
+      </div>
+      <a href="#" class="project-link">View Project ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">03</div>
+      <div class="project-cat">E-Commerce Platform</div>
+      <h3 class="project-title">Craft & Co. Store</h3>
+      <p class="project-desc">A fully custom e-commerce platform for artisan goods with advanced filtering, AR product previews, and a seamless checkout experience.</p>
+      <div class="project-tags">
+        <span class="project-tag">Next.js</span>
+        <span class="project-tag">Stripe</span>
+        <span class="project-tag">Sanity</span>
+      </div>
+      <a href="#" class="project-link">View Project ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">04</div>
+      <div class="project-cat">AI Tool</div>
+      <h3 class="project-title">Lexia Writing Assistant</h3>
+      <p class="project-desc">An AI-powered writing tool with tone analysis, plagiarism detection, and smart suggestions. Designed for bloggers, marketers, and content teams.</p>
+      <div class="project-tags">
+        <span class="project-tag">Python</span>
+        <span class="project-tag">OpenAI API</span>
+        <span class="project-tag">FastAPI</span>
+      </div>
+      <a href="#" class="project-link">View Project ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">05</div>
+      <div class="project-cat">Design System</div>
+      <h3 class="project-title">Nova UI Kit</h3>
+      <p class="project-desc">A comprehensive design system with 200+ components, dark/light theming, and accessibility built in from the ground up. Used across 3 products.</p>
+      <div class="project-tags">
+        <span class="project-tag">Figma</span>
+        <span class="project-tag">Storybook</span>
+        <span class="project-tag">TypeScript</span>
+      </div>
+      <a href="#" class="project-link">View Project ↗</a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">06</div>
+      <div class="project-cat">SaaS Platform</div>
+      <h3 class="project-title">Teamflow Collaboration</h3>
+      <p class="project-desc">A remote team collaboration tool with async video, kanban boards, and time-zone smart scheduling. Built for distributed teams of all sizes.</p>
+      <div class="project-tags">
+        <span class="project-tag">Vue.js</span>
+        <span class="project-tag">WebRTC</span>
+        <span class="project-tag">PostgreSQL</span>
+      </div>
+      <a href="#" class="project-link">View Project ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Experience</div>
+  <h2 class="section-title">Where I've <em>worked</em></h2>
+  <div class="experience-list fade-up">
+
+    <div class="exp-item">
+      <div class="exp-year">2023 — Present</div>
+      <div>
+        <div class="exp-role">Senior Frontend Developer</div>
+        <div class="exp-company">TechVentures Pvt. Ltd. · Bengaluru</div>
+        <p class="exp-desc">Lead the frontend architecture for a B2B SaaS platform serving 50k+ users. Drove a 40% performance improvement through code splitting and lazy loading. Mentor junior developers and establish design system standards.</p>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-year">2022 — 2023</div>
+      <div>
+        <div class="exp-role">Full Stack Developer</div>
+        <div class="exp-company">Startify Labs · Bengaluru</div>
+        <p class="exp-desc">Built end-to-end features for a fintech startup from MVP to production. Owned the React frontend, Node.js APIs, and PostgreSQL schema design for core product features.</p>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-year">2021 — 2022</div>
+      <div>
+        <div class="exp-role">UI/UX Developer Intern</div>
+        <div class="exp-company">DesignCraft Studio · Remote</div>
+        <p class="exp-desc">Designed and implemented responsive interfaces for 8 client projects. Worked closely with UX researchers and stakeholders to translate wireframes into pixel-perfect code.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Contact</div>
+  <h2 class="section-title">Let's build <em>something</em></h2>
+  <div class="contact-inner fade-up">
+    <div>
+      <div class="contact-text">
+        <p>Whether you have a project in mind, a role to fill, or just want to say hello — my inbox is always open. Let's create something remarkable together.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:darshan@example.com" class="contact-link">
+          <div>
+            <span class="cl-platform">Email</span>
+            <span class="cl-handle">darshan@example.com</span>
+          </div>
+          <span class="cl-arrow">↗</span>
+        </a>
+        <a href="https://linkedin.com" class="contact-link">
+          <div>
+            <span class="cl-platform">LinkedIn</span>
+            <span class="cl-handle">/in/darshan-l</span>
+          </div>
+          <span class="cl-arrow">↗</span>
+        </a>
+        <a href="https://github.com" class="contact-link">
+          <div>
+            <span class="cl-platform">GitHub</span>
+            <span class="cl-handle">@darshan-l</span>
+          </div>
+          <span class="cl-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form-area">
+      <div class="form-row">
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Your Email">
+      </div>
+      <input type="text" placeholder="Subject">
+      <textarea placeholder="Tell me about your project…"></textarea>
+      <button class="btn-primary" style="align-self: flex-start; border:none; cursor:none;">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DL</div>
+  <p>© 2026 Darshan L. All rights reserved.</p>
+  <p>Designed &amp; Built with ♥</p>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  document.querySelectorAll('a, button, .project-card, .skill-tag').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '18px'; cursor.style.height = '18px';
+      ring.style.width = '60px'; ring.style.height = '60px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '10px'; cursor.style.height = '10px';
+      ring.style.width = '40px'; ring.style.height = '40px';
+    });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Hero text reveal on load
+  window.addEventListener('load', () => {
+    document.querySelector('.hero-content').style.animation = 'none';
+    const els = document.querySelectorAll('.hero-tag, .hero-name, .hero-role, .hero-desc, .hero-cta');
+    els.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = `opacity 0.8s ease ${i * 0.12}s, transform 0.8s ease ${i * 0.12}s`;
+      requestAnimationFrame(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+    });
+  });
+</script>
+</body>
+</html>
